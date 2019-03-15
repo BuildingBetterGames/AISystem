@@ -9,6 +9,8 @@ namespace BBG.AISystem.Pathfinding
 {
     public class PathfindingSystem : JobComponentSystem
     {
+        public static int dimension = 20;
+
         struct Regions
         {
             [ReadOnly] public readonly int Length;
@@ -90,8 +92,8 @@ namespace BBG.AISystem.Pathfinding
                         {
                             // do pathfinding
                             var nodes = regions.Node[i];
-                            int startIndex = (((int)aiUnits.Position[index].Value.y) * ECSManager.dimension) + ((int)aiUnits.Position[index].Value.x);
-                            int endIndex = (((int)aiUnits.AI[index].targetPos.y) * ECSManager.dimension) + ((int)aiUnits.AI[index].targetPos.x);
+                            int startIndex = (((int)aiUnits.Position[index].Value.y) * PathfindingSystem.dimension) + ((int)aiUnits.Position[index].Value.x);
+                            int endIndex = (((int)aiUnits.AI[index].targetPos.y) * PathfindingSystem.dimension) + ((int)aiUnits.AI[index].targetPos.x);
                             if (startIndex >= nodes.Length || startIndex < 0 ||
                                 endIndex >= nodes.Length || endIndex < 0)
                             {
@@ -108,7 +110,7 @@ namespace BBG.AISystem.Pathfinding
                             startPointer.hCost = GetDistance(startNode, endNode);
 
                             NativeList<Pointer> openSet = new NativeList<Pointer>(Allocator.Temp);
-                            NativeHashMap<int, Pointer> closedSet = new NativeHashMap<int, Pointer>(ECSManager.dimension * ECSManager.dimension, Allocator.Temp);
+                            NativeHashMap<int, Pointer> closedSet = new NativeHashMap<int, Pointer>(PathfindingSystem.dimension * PathfindingSystem.dimension, Allocator.Temp);
                             openSet.Add(startPointer);
 
                             while (openSet.Length > 0)
